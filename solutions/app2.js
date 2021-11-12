@@ -11,11 +11,31 @@ setCookie("ssid", "Bx55OWbHJ0Vt_IGIF");
 
 const cookieHandler = {
   getAll() {
-    
+    const keyValuePairs = document.cookie.split('; ');
+    const object ={};
+    for (let value of keyValuePairs){
+      let nameValue = value.split('=');
+      object[nameValue[0]] = nameValue[1];
+    }
+    return object;
 
   },
-  toSessionStorage() {},
-  flush() {},
+  toSessionStorage() {
+    let object = this.getAll();
+    for (const [key, value] of Object.entries(object)) { 
+      sessionStorage.setItem(key, value);
+    }
+  },
+  flush() {
+    const cookies = document.cookie.split('; ');
+
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf("=");
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+  },
 };
 
 export { cookieHandler };
